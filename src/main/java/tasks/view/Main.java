@@ -7,10 +7,10 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import org.apache.log4j.Logger;
-import tasks.controller.Controller;
-import tasks.controller.Notificator;
+import tasks.controller.MainController;
+import tasks.controller.NotificatorController;
 import tasks.model.ArrayTaskList;
-import tasks.services.TaskIO;
+import tasks.repository.TaskRepository;
 import tasks.services.TasksService;
 
 import java.io.File;
@@ -23,25 +23,24 @@ public class Main extends Application {
 
     private static final Logger log = Logger.getLogger(Main.class.getName());
 
-    private ArrayTaskList savedTasksList = new ArrayTaskList();
+    private final ArrayTaskList savedTasksList = new ArrayTaskList();
 
-    private static ClassLoader classLoader = Main.class.getClassLoader();
+    private static final ClassLoader classLoader = Main.class.getClassLoader();
     public static File savedTasksFile = new File(classLoader.getResource("data/tasks.txt").getFile());
 
     private TasksService service = new TasksService(savedTasksList);//savedTasksList);
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-
         log.info("saved data reading");
         if (savedTasksFile.length() != 0) {
-            TaskIO.readBinary(savedTasksList, savedTasksFile);
+            TaskRepository.readText(savedTasksList, savedTasksFile);
         }
         try {
             log.info("application start");
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/main.fxml"));
             Parent root = loader.load();//loader.load(this.getClass().getResource("/fxml/main.fxml"));
-            Controller ctrl= loader.getController();
+            MainController ctrl = loader.getController();
             service = new TasksService(savedTasksList);
 
             ctrl.setService(service);
@@ -50,15 +49,12 @@ public class Main extends Application {
             primaryStage.setMinWidth(defaultWidth);
             primaryStage.setMinHeight(defaultHeight);
             primaryStage.show();
-        }
-        catch (IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
             log.error("error reading main.fxml");
         }
-        primaryStage.setOnCloseRequest(we -> {
-                System.exit(0);
-            });
-        new Notificator(FXCollections.observableArrayList(service.getObservableList())).start();
+        primaryStage.setOnCloseRequest(we -> System.exit(0));
+        new NotificatorController(FXCollections.observableArrayList(service.getObservableList())).start();
     }
 
     public static void main(String[] args) {

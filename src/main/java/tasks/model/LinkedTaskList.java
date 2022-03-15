@@ -10,9 +10,10 @@ import java.util.NoSuchElementException;
 
 import static java.util.Objects.isNull;
 
-public class LinkedTaskList  extends TaskList {
+public class LinkedTaskList extends TaskList {
     private static final Logger log = Logger.getLogger(LinkedTaskList.class.getName());
-    private class LinkedTaskListIterator implements Iterator<Task>{
+
+    private class LinkedTaskListIterator implements Iterator<Task> {
         private int cursor;
         private int lastCalled = -1;
 
@@ -24,7 +25,7 @@ public class LinkedTaskList  extends TaskList {
 
         @Override
         public Task next() {
-            if (!hasNext()){
+            if (!hasNext()) {
                 log.error("next iterator element doesn't exist");
                 throw new NoSuchElementException("No next element");
             }
@@ -34,7 +35,7 @@ public class LinkedTaskList  extends TaskList {
 
         @Override
         public void remove() {
-            if (lastCalled == -1){
+            if (lastCalled == -1) {
                 throw new IllegalStateException();
             }
             LinkedTaskList.this.remove(getTask(lastCalled));
@@ -42,6 +43,7 @@ public class LinkedTaskList  extends TaskList {
             lastCalled = -1;
         }
     }
+
     private int numberOfTasks;
     private Node last;
 
@@ -50,9 +52,10 @@ public class LinkedTaskList  extends TaskList {
         numberOfTasks++;
         Node lastNode = last;
         Node newNode = new Node(task, lastNode);
-        if (last!= null) last.setNext(newNode);
+        if (last != null) last.setNext(newNode);
         last = newNode;
     }
+
     @Override
     public boolean remove(Task task) {
         if (isNull(task)) {
@@ -63,14 +66,14 @@ public class LinkedTaskList  extends TaskList {
         Node cursor = last;
         if (last.getTask().equals(task)) this.last = last.getLast();
         int tasksToCheck = size();
-        while (tasksToCheck > 0 && !task.equals(cursor.getTask())){
+        while (tasksToCheck > 0 && !task.equals(cursor.getTask())) {
             cursor = cursor.getLast();
             tasksToCheck--;
         }
         if (isNull(cursor)) return false;
 
-        if (cursor.last!= null) cursor.getLast().setNext(cursor.getNext());
-        if (cursor.next!= null) cursor.getNext().setLast(cursor.getLast());
+        if (cursor.last != null) cursor.getLast().setNext(cursor.getNext());
+        if (cursor.next != null) cursor.getNext().setLast(cursor.getLast());
 
         numberOfTasks--;
         return true;
@@ -80,15 +83,16 @@ public class LinkedTaskList  extends TaskList {
     public int size() {
         return numberOfTasks;
     }
+
     @Override
     public Task getTask(int index) {
-        if (index < 0 || index > size()-1) {
+        if (index < 0 || index > size() - 1) {
             log.error("index doesn't exist");
             throw new IndexOutOfBoundsException("Index not found");
         }
-        int stepsBack = size()-index-1;
+        int stepsBack = size() - index - 1;
         Node current = last;
-        while (stepsBack > 0){
+        while (stepsBack > 0) {
             current = current.getLast();
             stepsBack--;
         }
@@ -97,8 +101,8 @@ public class LinkedTaskList  extends TaskList {
 
     @Override
     public List<Task> getAll() {
-        LinkedList<Task> tks=new LinkedList<>();
-        for (Task t: this)
+        LinkedList<Task> tks = new LinkedList<>();
+        for (Task t : this)
             tks.add(t);
         return tks;
     }
@@ -152,8 +156,8 @@ public class LinkedTaskList  extends TaskList {
 
         if (numberOfTasks != that.numberOfTasks) return false;
         int i = 0;
-        for (Task a : this){
-            if (!a.equals(((LinkedTaskList) o).getTask(i))){
+        for (Task a : this) {
+            if (!a.equals(((LinkedTaskList) o).getTask(i))) {
                 return false;
             }
             i++;
@@ -175,10 +179,11 @@ public class LinkedTaskList  extends TaskList {
                 ", last=" + last +
                 '}';
     }
+
     @Override
     protected LinkedTaskList clone() throws CloneNotSupportedException {
         LinkedTaskList tasks = new LinkedTaskList();
-        for (Task t : this){
+        for (Task t : this) {
             tasks.add(t);
         }
         return tasks;

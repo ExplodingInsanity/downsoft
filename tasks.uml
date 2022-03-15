@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement>C:/Users/radu_/Desktop/01_Tasks/src</OriginalElement>
+  <nodes>
+    <node x="1176.5" y="1149.0">tasks.model.TasksOperations</node>
+    <node x="172.5" y="0.0">tasks.model.TaskList</node>
+    <node x="547.0" y="823.0">tasks.services.DateService</node>
+    <node x="888.0" y="191.49999999999994">tasks.controller.MainController</node>
+    <node x="877.5431192660552" y="1138.5">tasks.services.DateServiceTest</node>
+    <node x="410.0" y="655.5">tasks.model.LinkedTaskList.Node</node>
+    <node x="1.0" y="239.0">tasks.model.ArrayTaskList</node>
+    <node x="0.0" y="633.0">tasks.model.ArrayTaskList.ArrayTaskListIterator</node>
+    <node x="640.6954128440368" y="1138.0">tasks.model.TaskTest</node>
+    <node x="886.0" y="823.0">tasks.controller.TaskInfoController</node>
+    <node x="201.0" y="633.0">tasks.model.LinkedTaskList.LinkedTaskListIterator</node>
+    <node x="1232.0" y="235.5">tasks.model.Task</node>
+    <node x="560.0" y="103.50000000000001">tasks.controller.NewEditController</node>
+    <node x="305.0" y="823.0">tasks.view.Main</node>
+    <node x="0.0" y="823.0">tasks.repository.TaskRepository</node>
+    <node x="324.8477064220184" y="1123.0">tasks.services.TasksService</node>
+    <node x="1099.0" y="823.0">tasks.controller.NotificatorController</node>
+    <node x="289.5" y="250.0">tasks.model.LinkedTaskList</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="tasks.model.LinkedTaskList" target="tasks.model.TaskList" relationship="GENERALIZATION">
+      <point x="0.0" y="-161.0" />
+      <point x="379.0" y="214.0" />
+      <point x="276.5" y="214.0" />
+      <point x="0.0" y="94.5" />
+    </edge>
+    <edge source="tasks.model.LinkedTaskList.LinkedTaskListIterator" target="tasks.model.LinkedTaskList" relationship="INNER_CLASS">
+      <point x="0.0" y="-72.5" />
+      <point x="295.5" y="608.0" />
+      <point x="379.0" y="608.0" />
+      <point x="0.0" y="161.0" />
+    </edge>
+    <edge source="tasks.model.LinkedTaskList.Node" target="tasks.model.LinkedTaskList" relationship="INNER_CLASS">
+      <point x="0.0" y="-50.0" />
+      <point x="462.5" y="608.0" />
+      <point x="379.0" y="608.0" />
+      <point x="0.0" y="161.0" />
+    </edge>
+    <edge source="tasks.model.ArrayTaskList" target="tasks.model.TaskList" relationship="GENERALIZATION">
+      <point x="0.0" y="-172.0" />
+      <point x="90.5" y="214.0" />
+      <point x="276.5" y="214.0" />
+      <point x="0.0" y="94.5" />
+    </edge>
+    <edge source="tasks.model.ArrayTaskList.ArrayTaskListIterator" target="tasks.model.ArrayTaskList" relationship="INNER_CLASS">
+      <point x="0.0" y="-72.5" />
+      <point x="0.0" y="172.0" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic" zoom="0.5009336767546684" showDependencies="false" x="821.9329648434989" y="533.9841892152452" />
+  <SelectedNodes />
+  <Categories>
+    <Category>Fields</Category>
+    <Category>Inner Classes</Category>
+    <Category>Methods</Category>
+    <Category>Properties</Category>
+  </Categories>
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+
