@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import javafx.scene.text.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tasks.controller.MainController">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tasks.controller.MainController">
    <children>
       <AnchorPane prefHeight="44.0" prefWidth="760.0">
          <VBox.margin>
@@ -26,8 +25,9 @@
          <children>
             <TableView fx:id="tasks" prefHeight="232.0" prefWidth="760.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
               <columns>
-                <TableColumn fx:id="columnTitle" prefWidth="348.0" text="Title" />
-                <TableColumn fx:id="columnTime" prefWidth="214.0" text="Time" />
+                <TableColumn fx:id="columnTitle" prefWidth="154.39998817443848" text="Title" />
+                  <TableColumn fx:id="columnDescription" prefWidth="225.60003662109375" text="Description" />
+                <TableColumn fx:id="columnTime" prefWidth="137.39999389648438" text="Time" />
                   <TableColumn fx:id="columnRepeated" prefWidth="197.0" text="Repeated" />
               </columns>
                <columnResizePolicy>

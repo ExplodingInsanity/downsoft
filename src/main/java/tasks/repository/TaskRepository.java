@@ -22,14 +22,15 @@ public class TaskRepository {
 
     private static final Logger log = Logger.getLogger(TaskRepository.class.getName());
 
-    private TaskRepository() {}
+    private TaskRepository() {
+    }
 
     public static void write(TaskList tasks, OutputStream out) throws IOException {
         try (DataOutputStream dataOutputStream = new DataOutputStream(out)) {
             dataOutputStream.writeInt(tasks.size());
             for (Task t : tasks) {
-                dataOutputStream.writeInt(t.getTitle().length());
                 dataOutputStream.writeUTF(t.getTitle());
+                dataOutputStream.writeUTF(t.getDescription());
                 dataOutputStream.writeBoolean(t.isActive());
                 dataOutputStream.writeInt(t.getRepeatInterval());
                 if (t.isRepeated()) {
@@ -46,17 +47,17 @@ public class TaskRepository {
         try (DataInputStream dataInputStream = new DataInputStream(in)) {
             int listLength = dataInputStream.readInt();
             for (int i = 0; i < listLength; i++) {
-                int titleLength = dataInputStream.readInt();
                 String title = dataInputStream.readUTF();
+                String description = dataInputStream.readUTF();
                 boolean isActive = dataInputStream.readBoolean();
                 int interval = dataInputStream.readInt();
                 Date startTime = new Date(dataInputStream.readLong());
                 Task taskToAdd;
                 if (interval > 0) {
                     Date endTime = new Date(dataInputStream.readLong());
-                    taskToAdd = new Task(title, startTime, endTime, interval);
+                    taskToAdd = new Task(title, description, startTime, endTime, interval);
                 } else {
-                    taskToAdd = new Task(title, startTime);
+                    taskToAdd = new Task(title, description, startTime);
                 }
                 taskToAdd.setActive(isActive);
                 tasks.add(taskToAdd);
@@ -127,15 +128,16 @@ public class TaskRepository {
         boolean isActive = !line.contains("inactive");//if doesnt have inactive - means active
         //Task(String title, Date time)   Task(String title, Date start, Date end, int interval)
         Task result;
-        String title = getTitleFromText(line);
+        String title = getStringFromText(line, 1);
+        String description = getStringFromText(line, title.length() + 4);
         if (isRepeated) {
             Date startTime = getDateFromText(line, true);
             Date endTime = getDateFromText(line, false);
             int interval = getIntervalFromText(line);
-            result = new Task(title, startTime, endTime, interval);
+            result = new Task(title, description, startTime, endTime, interval);
         } else {
             Date startTime = getDateFromText(line, true);
-            result = new Task(title, startTime);
+            result = new Task(title, description, startTime);
         }
         result.setActive(isActive);
         return result;
@@ -208,9 +210,9 @@ public class TaskRepository {
         return date;
     }
 
-    private static String getTitleFromText(String line) {
-        int start = 1;
-        int end = line.lastIndexOf("\"");
+    private static String getStringFromText(String line, int start) {
+        int end = start + 1;
+        while (end < line.length() && line.charAt(end) != '\"') end++;
         String result = line.substring(start, end);
         result = result.replace("\"\"", "\"");
         return result;
@@ -219,9 +221,18 @@ public class TaskRepository {
     //service methods for writing
     private static String getFormattedTask(Task task) {
         StringBuilder result = new StringBuilder();
+
+        // title replacement
         String title = task.getTitle();
         if (title.contains("\"")) title = title.replace("\"", "\"\"");
         result.append("\"").append(title).append("\"");
+
+        result.append(" ");
+
+        // description replacement
+        String description = task.getDescription();
+        if (description.contains("\"")) description = description.replace("\"", "\"\"");
+        result.append("\"").append(description).append("\"");
 
         if (task.isRepeated()) {
             result.append(" from ");

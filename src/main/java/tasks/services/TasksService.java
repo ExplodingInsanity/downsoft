@@ -6,11 +6,12 @@ import tasks.model.ArrayTaskList;
 import tasks.model.Task;
 import tasks.model.TasksOperations;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 public class TasksService {
-
     private final ArrayTaskList tasks;
+    private final DateService dateService = new DateService(this);
 
     public TasksService(ArrayTaskList tasks) {
         this.tasks = tasks;
@@ -48,5 +49,19 @@ public class TasksService {
     public Iterable<Task> filterTasks(Date start, Date end) {
         TasksOperations tasksOps = new TasksOperations(getObservableList());
         return tasksOps.incoming(start, end);
+    }
+
+    public Task addNewTask(String title, String description, Date startDate, Date endDate,
+                           int interval, boolean isActive) {
+        Task result;
+        if (endDate != null && interval != 0) {
+            if (startDate.after(endDate)) throw new IllegalArgumentException("Start date should be before end");
+            result = new Task(title, description, startDate, endDate, interval);
+        } else {
+            result = new Task(title, description, startDate);
+        }
+        result.setActive(isActive);
+        System.out.println(result);
+        return result;
     }
 }

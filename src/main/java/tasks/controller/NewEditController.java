@@ -29,6 +29,7 @@ public class NewEditController {
 
     private static final Logger log = Logger.getLogger(NewEditController.class.getName());
 
+
     public static void setClickedButton(Button clickedButton) {
         NewEditController.clickedButton = clickedButton;
     }
@@ -48,6 +49,8 @@ public class NewEditController {
     private boolean incorrectInputMade;
     @FXML
     private TextField fieldTitle;
+    @FXML
+    public TextField descriptionTextField;
     @FXML
     private DatePicker datePickerStart;
     @FXML
@@ -191,24 +194,21 @@ public class NewEditController {
     }
 
     private Task makeTask() {
-        Task result;
         String newTitle = fieldTitle.getText();
+        String newDescription = descriptionTextField.getText();
+
         Date startDateWithNoTime = dateService.getDateValueFromLocalDate(datePickerStart.getValue());//ONLY date!!without time
         Date newStartDate = dateService.getDateMergedWithTime(txtFieldTimeStart.getText(), startDateWithNoTime);
+
+        Date newEndDate = null;
+        int newInterval = 0;
         if (checkBoxRepeated.isSelected()) {
             Date endDateWithNoTime = dateService.getDateValueFromLocalDate(datePickerEnd.getValue());
-            Date newEndDate = dateService.getDateMergedWithTime(txtFieldTimeEnd.getText(), endDateWithNoTime);
-            int newInterval = service.parseFromStringToSeconds(fieldInterval.getText());
-            if (newStartDate.after(newEndDate)) throw new IllegalArgumentException("Start date should be before end");
-            result = new Task(newTitle, newStartDate, newEndDate, newInterval);
-        } else {
-            result = new Task(newTitle, newStartDate);
+            newEndDate = dateService.getDateMergedWithTime(txtFieldTimeEnd.getText(), endDateWithNoTime);
+            newInterval = service.parseFromStringToSeconds(fieldInterval.getText());
         }
-        boolean isActive = checkBoxActive.isSelected();
-        result.setActive(isActive);
-        System.out.println(result);
-        return result;
+
+        return service.addNewTask(newTitle, newDescription, newStartDate,
+                newEndDate, newInterval, checkBoxActive.isSelected());
     }
-
-
 }
