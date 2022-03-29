@@ -1,5 +1,5 @@
 package tasks.controller;
-
+ 
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
@@ -18,27 +18,29 @@ import tasks.services.DateService;
 import tasks.repository.TaskRepository;
 import tasks.services.TasksService;
 import tasks.view.Main;
-
+ 
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
-
+ 
 public class MainController {
     private static final Logger log = Logger.getLogger(MainController.class.getName());
     public ObservableList<Task> tasksList;
     TasksService service;
     DateService dateService;
-
+ 
     public static Stage editNewStage;
     public static Stage infoStage;
-
+ 
     public static TableView mainTable;
-
+ 
     @FXML
     public TableView tasks;
     @FXML
     private TableColumn<Task, String> columnTitle;
+    @FXML
+    private TableColumn<Task, String> columnDescription;
     @FXML
     private TableColumn<Task, String> columnTime;
     @FXML
@@ -53,7 +55,7 @@ public class MainController {
     private DatePicker datePickerTo;
     @FXML
     private TextField fieldTimeTo;
-
+ 
     public void setService(TasksService service) {
         this.service = service;
         this.dateService = new DateService(service);
@@ -61,31 +63,32 @@ public class MainController {
         updateCountLabel(tasksList);
         tasks.setItems(tasksList);
         mainTable = tasks;
-
+ 
         tasksList.addListener((ListChangeListener.Change<? extends Task> c) -> {
                     updateCountLabel(tasksList);
                     tasks.setItems(tasksList);
                 }
         );
     }
-
+ 
     @FXML
     public void initialize() {
         log.info("Main controller initializing");
         columnTitle.setCellValueFactory(new PropertyValueFactory<>("title"));
+        columnDescription.setCellValueFactory(new PropertyValueFactory<>("description"));
         columnTime.setCellValueFactory(new PropertyValueFactory<>("formattedDateStart"));
         columnRepeated.setCellValueFactory(new PropertyValueFactory<>("formattedRepeated"));
     }
-
+ 
     private void updateCountLabel(ObservableList<Task> list) {
         labelCount.setText(list.size() + " elements");
     }
-
+ 
     @FXML
     public void showTaskDialog(ActionEvent actionEvent) {
         Object source = actionEvent.getSource();
         NewEditController.setClickedButton((Button) source);
-
+ 
         try {
             editNewStage = new Stage();
             NewEditController.setCurrentStage(editNewStage);
@@ -104,14 +107,14 @@ public class MainController {
             log.error("Error loading new-edit-task.fxml");
         }
     }
-
+ 
     @FXML
     public void deleteTask() {
         Task toDelete = (Task) tasks.getSelectionModel().getSelectedItem();
         tasksList.remove(toDelete);
         TaskRepository.rewriteFile(tasksList);
     }
-
+ 
     @FXML
     public void showDetailedInfo() {
         try {
@@ -128,26 +131,27 @@ public class MainController {
             log.error("error loading task-info.fxml");
         }
     }
-
+ 
     @FXML
     public void showFilteredTasks() {
         Date start = getDateFromFilterField(datePickerFrom.getValue(), fieldTimeFrom.getText());
         Date end = getDateFromFilterField(datePickerTo.getValue(), fieldTimeTo.getText());
-
+ 
         Iterable<Task> filtered = service.filterTasks(start, end);
-
+ 
         ObservableList<Task> observableTasks = FXCollections.observableList((ArrayList) filtered);
         tasks.setItems(observableTasks);
         updateCountLabel(observableTasks);
     }
-
+ 
     private Date getDateFromFilterField(LocalDate localDate, String time) {
         Date date = dateService.getDateValueFromLocalDate(localDate);
         return dateService.getDateMergedWithTime(time, date);
     }
-
+ 
     @FXML
     public void resetFilteredTasks() {
         tasks.setItems(tasksList);
     }
 }
+ 
