@@ -52,9 +52,9 @@ public class TasksService {
     }
 
     public Task addNewTask(String title, String description, Date startDate, Date endDate,
-                           int interval, boolean isActive) {
+                           Integer interval, boolean isActive) {
         Task result;
-        if (endDate != null && interval != 0) {
+        if (endDate != null && interval != null) {
             if (startDate.after(endDate)) throw new IllegalArgumentException("Start date should be before end");
             result = new Task(title, description, startDate, endDate, interval);
         } else {

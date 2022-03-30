@@ -201,7 +201,7 @@ public class NewEditController {
         Date newStartDate = dateService.getDateMergedWithTime(txtFieldTimeStart.getText(), startDateWithNoTime);
 
         Date newEndDate = null;
-        int newInterval = 0;
+        Integer newInterval = null;
         if (checkBoxRepeated.isSelected()) {
             Date endDateWithNoTime = dateService.getDateValueFromLocalDate(datePickerEnd.getValue());
             newEndDate = dateService.getDateMergedWithTime(txtFieldTimeEnd.getText(), endDateWithNoTime);
