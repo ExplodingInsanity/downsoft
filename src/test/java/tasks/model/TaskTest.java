@@ -5,6 +5,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.text.ParseException;
+import java.time.Instant;
 import java.util.Date;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -33,5 +34,15 @@ class TaskTest {
 
     @AfterEach
     void tearDown() {
+    }
+
+    @Test
+    void computeNextOccurrence() {
+        Task t = new Task("null","null", new Date(),Date.from(Instant.parse("2030-12-12T00:00:00Z")),1);
+        assertEquals(null, t.computeNextOccurrence(Date.from(Instant.parse("1990-12-12T00:00:00Z")),null,null, Date.from(Instant.parse("2020-12-01T00:00:00Z")),null));
+        assertEquals(null, t.computeNextOccurrence(Date.from(Instant.parse("2020-12-12T00:00:00Z")),null,null, Date.from(Instant.parse("2020-12-12T00:00:00Z")),Date.from(Instant.parse("2020-12-12T00:00:00Z"))));
+        assertEquals(Date.from(Instant.parse("2020-12-12T00:00:01Z")), t.computeNextOccurrence(Date.from(Instant.parse("2020-12-12T00:00:00Z")),null,Date.from(Instant.parse("2020-12-12T00:00:00Z")), Date.from(Instant.parse("2020-12-12T00:00:00Z")),Date.from(Instant.parse("2020-12-14T00:00:00Z"))));
+        assertEquals(Date.from(Instant.parse("2020-12-10T00:00:00Z")), t.computeNextOccurrence(Date.from(Instant.parse("2020-12-12T00:00:00Z")),Date.from(Instant.parse("2020-12-10T00:00:00Z")),Date.from(Instant.parse("2020-12-14T00:00:00Z")), Date.from(Instant.parse("2020-12-12T00:00:00Z")),Date.from(Instant.parse("2020-12-14T00:00:00Z"))));
+        assertEquals(null, t.computeNextOccurrence(Date.from(Instant.parse("2020-12-12T00:00:00Z")),Date.from(Instant.parse("2020-12-10T00:00:00Z")),Date.from(Instant.parse("2020-12-10T00:00:01Z")), Date.from(Instant.parse("2020-12-12T00:00:00Z")),Date.from(Instant.parse("2020-12-12T00:00:01Z"))));
     }
 }
