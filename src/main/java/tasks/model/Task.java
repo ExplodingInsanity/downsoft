@@ -112,6 +112,8 @@ public class Task implements Serializable, Cloneable {
         return this.interval != 0;
     }
 
+
+
     public Date nextTimeAfter(Date current) {
         System.out.println(current.after(end));
         System.out.println(current.equals(end));
@@ -122,17 +124,25 @@ public class Task implements Serializable, Cloneable {
             if (current.before(start)) {
                 return start;
             }
-            if ((current.after(start) || current.equals(start)) && (current.before(end) || current.equals(end))) {
-                for (long i = start.getTime(); i <= end.getTime(); i += interval * 1000) {
-                    if (current.equals(timeAfter)) return new Date(timeAfter.getTime() + interval * 1000);
-                    if (current.after(timeBefore) && current.before(timeAfter)) return timeBefore;//return timeAfter
-                    timeBefore = timeAfter;
-                    timeAfter = new Date(timeAfter.getTime() + interval * 1000);
-                }
-            }
+
+            Date timeAfter1 = computeNextOccurrence(current, timeBefore, timeAfter, start,end );
+
+            if (timeAfter1 != null) return timeAfter1;
         }
         if (!isRepeated() && current.before(time) && isActive()) {
             return time;
+        }
+        return null;
+    }
+
+    public Date computeNextOccurrence(Date current, Date timeBefore, Date timeAfter, Date start, Date end) {
+        if ((current.after(start) || current.equals(start)) && (current.before(end) || current.equals(end))) {
+            for (long i = start.getTime(); i <= end.getTime(); i += interval * 1000) {
+                if (current.equals(timeAfter)) return new Date(timeAfter.getTime() + interval * 1000);
+                if (current.after(timeBefore) && current.before(timeAfter)) return timeBefore;
+                timeBefore = timeAfter;
+                timeAfter = new Date(timeAfter.getTime() + interval * 1000);
+            }
         }
         return null;
     }

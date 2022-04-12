@@ -34,4 +34,8 @@ class TaskTest {
     @AfterEach
     void tearDown() {
     }
+
+    @Test
+    void computeNextOccurrence() {
+    }
 }
