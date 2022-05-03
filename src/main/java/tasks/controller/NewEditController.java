@@ -208,7 +208,7 @@ public class NewEditController {
             newInterval = service.parseFromStringToSeconds(fieldInterval.getText());
         }
 
-        return service.addNewTask(newTitle, newDescription, newStartDate,
+        return service.createNewTask(newTitle, newDescription, newStartDate,
                 newEndDate, newInterval, checkBoxActive.isSelected());
     }
 }

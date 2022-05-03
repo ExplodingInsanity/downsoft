@@ -13,7 +13,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class TaskRepository {
+public class TaskRepository implements ITaskRepository {
     public static final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("[yyyy-MM-dd HH:mm:ss.SSS]");
     private static final String[] TIME_ENTITY = {" day", " hour", " minute", " second"};
     private static final int secondsInDay = 86400;
@@ -26,9 +26,6 @@ public class TaskRepository {
 
     public TaskRepository(File file) {
         this.file = file;
-    }
-
-    private TaskRepository() {
     }
 
     public static void write(TaskList tasks, OutputStream out) throws IOException {
@@ -294,6 +291,7 @@ public class TaskRepository {
         }
     }
 
+    @Override
     public ArrayTaskList getAll() throws IOException {
         ArrayTaskList taskList = new ArrayTaskList();
         readText(taskList, file);
