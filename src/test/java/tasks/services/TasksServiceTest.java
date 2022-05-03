@@ -59,12 +59,13 @@ class TasksServiceTest {
         }
     }
 
-    @ParameterizedTest
+    @Test
     @DisplayName("Test valid => se adauga task")
-    @MethodSource(value = "validTasksProvider")
-    void testValid(String title, int interval) throws ParseException {
-        Assertions.assertDoesNotThrow(() -> {
-            tasksService.createNewTask(title, DESCRIPTION, START_DATE, END_DATE, interval, true);
+    void testValid() throws ParseException {
+        validTasksProvider().forEach(arg -> {
+            Assertions.assertDoesNotThrow(() -> {
+                tasksService.createNewTask((String) arg.get()[0], DESCRIPTION, START_DATE, END_DATE, (Integer) arg.get()[1], true);
+            });
         });
     }
 
@@ -81,11 +82,12 @@ class TasksServiceTest {
         );
     }
 
-    @ParameterizedTest
+    @Test
     @DisplayName("Test invalid title => se adauga task")
-    @MethodSource(value = "invalidTitleTasksProvider")
-    void testInvalidTitle(String title, int interval) throws ParseException {
-        Assertions.assertThrows(IllegalArgumentException.class, (Executable) () -> tasksService.createNewTask(title, DESCRIPTION, START_DATE, END_DATE, interval, true), "Invalid title");
+    void testInvalidTitle() throws ParseException {
+        invalidTitleTasksProvider().forEach(arg -> {
+            Assertions.assertThrows(IllegalArgumentException.class, (Executable) () -> tasksService.createNewTask((String) arg.get()[0], DESCRIPTION, START_DATE, END_DATE, (Integer) arg.get()[1], true), "Invalid title");
+        });
     }
 
     private static Stream<Arguments> invalidTitleTasksProvider() {
@@ -95,11 +97,12 @@ class TasksServiceTest {
         );
     }
 
-    @ParameterizedTest
+    @Test
     @DisplayName("Test invalid interval => se adauga task")
-    @MethodSource(value = "invalidIntervalTasksProvider")
-    void testInvalidInterval(String title, int interval) throws ParseException {
-        Assertions.assertThrows(IllegalArgumentException.class, (Executable) () -> tasksService.createNewTask(title, DESCRIPTION, START_DATE, END_DATE, interval, true), "Invalid interval");
+    void testInvalidInterval() throws ParseException {
+        invalidIntervalTasksProvider().forEach(arg -> {
+            Assertions.assertThrows(IllegalArgumentException.class, (Executable) () -> tasksService.createNewTask((String) arg.get()[0], DESCRIPTION, START_DATE, END_DATE, (Integer) arg.get()[1], true), "Invalid interval");
+        });
     }
 
     private static Stream<Arguments> invalidIntervalTasksProvider() {
