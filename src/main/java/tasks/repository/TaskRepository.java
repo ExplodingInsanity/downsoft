@@ -2,6 +2,7 @@ package tasks.repository;
 
 import javafx.collections.ObservableList;
 import org.apache.log4j.Logger;
+import tasks.model.ArrayTaskList;
 import tasks.model.LinkedTaskList;
 import tasks.model.Task;
 import tasks.model.TaskList;
@@ -13,14 +14,19 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class TaskRepository {
-    private static final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("[yyyy-MM-dd HH:mm:ss.SSS]");
+    public static final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("[yyyy-MM-dd HH:mm:ss.SSS]");
     private static final String[] TIME_ENTITY = {" day", " hour", " minute", " second"};
     private static final int secondsInDay = 86400;
     private static final int secondsInHour = 3600;
     private static final int secondsInMin = 60;
     private static final String IO_ERROR_MESSAGE = "IO exception reading or writing file";
 
+    File file;
     private static final Logger log = Logger.getLogger(TaskRepository.class.getName());
+
+    public TaskRepository(File file) {
+        this.file = file;
+    }
 
     private TaskRepository() {
     }
@@ -123,7 +129,7 @@ public class TaskRepository {
     }
 
     // service methods for reading
-    private static Task getTaskFromString(String line) {
+    public static Task getTaskFromString(String line) {
         boolean isRepeated = line.contains("from");//if contains - means repeated
         boolean isActive = !line.contains("inactive");//if doesnt have inactive - means active
         //Task(String title, Date time)   Task(String title, Date start, Date end, int interval)
@@ -144,7 +150,7 @@ public class TaskRepository {
     }
 
     //
-    private static int getIntervalFromText(String line) {
+    public static int getIntervalFromText(String line) {
         int days, hours, minutes, seconds;
         //[1 day 2 hours 46 minutes 40 seconds].
         //[46 minutes 40 seconds].
@@ -159,7 +165,8 @@ public class TaskRepository {
 
         int[] timeEntities = new int[]{days, hours, minutes, seconds};
         int i = 0, j = timeEntities.length - 1;// positions of timeEntities available
-        while (i != 1 && j != 1) {
+        //        while (i != 1 && j != 1) {
+        while (timeEntities[i] != 1 || timeEntities[j] != 1 && i <= j) {
             if (timeEntities[i] == 0) i++;
             if (timeEntities[j] == 0) j--;
         }
@@ -285,5 +292,11 @@ public class TaskRepository {
         } catch (IOException e) {
             log.error(IO_ERROR_MESSAGE);
         }
+    }
+
+    public ArrayTaskList getAll() throws IOException {
+        ArrayTaskList taskList = new ArrayTaskList();
+        readText(taskList, file);
+        return taskList;
     }
 }

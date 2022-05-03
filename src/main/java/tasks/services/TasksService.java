@@ -5,7 +5,9 @@ import javafx.collections.ObservableList;
 import tasks.model.ArrayTaskList;
 import tasks.model.Task;
 import tasks.model.TasksOperations;
+import tasks.repository.TaskRepository;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.Date;
 
@@ -13,8 +15,14 @@ public class TasksService {
     private final ArrayTaskList tasks;
     private final DateService dateService = new DateService(this);
 
+    TaskRepository repository;
+
     public TasksService(ArrayTaskList tasks) {
         this.tasks = tasks;
+    }
+    public TasksService(TaskRepository repo) throws IOException {
+        this.repository = repo;
+        this.tasks = repo.getAll();
     }
 
     public ObservableList<Task> getObservableList() {

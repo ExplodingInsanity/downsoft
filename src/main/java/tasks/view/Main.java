@@ -28,7 +28,11 @@ public class Main extends Application {
     private static final ClassLoader classLoader = Main.class.getClassLoader();
     public static File savedTasksFile = new File(classLoader.getResource("data/tasks.txt").getFile());
 
-    private TasksService service = new TasksService(savedTasksList);//savedTasksList);
+    TaskRepository repository = new TaskRepository(savedTasksFile);
+    private TasksService service = new TasksService(repository);//savedTasksList);
+
+    public Main() throws IOException {
+    }
 
     @Override
     public void start(Stage primaryStage) throws Exception {
